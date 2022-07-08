@@ -25,13 +25,16 @@ const Bird = () => {
       clearInterval(timeGravity);
     };
   }, [startGame, birdPosition]);
-  const handleClick = () => {
-    if (startGame) {
-      let newBirdPosition = birdPosition - jump;
 
-      if (newBirdPosition < 0) {
-        newBirdPosition = 0;
-      }
+  const handleClick = () => {
+    let newBirdPosition = birdPosition - jump;
+    if (!startGame) {
+      setStartGame(true);
+      setScore(0);
+      setBirdPosition(250);
+    } else if (newBirdPosition < 0) {
+      setBirdPosition(0);
+    } else {
       setBirdPosition(newBirdPosition);
     }
   };
@@ -60,15 +63,12 @@ const Bird = () => {
     } else {
       setPipeLeft(1000 - pipeWidth);
       setPipeHeight(Math.floor(Math.random() * (gameHeight - pipeGap)));
-      setScore((score) => score + 1);
+      console.log(score);
+      if (startGame) {
+        setScore(score + 1);
+      }
     }
   }, [startGame, pipeLeft]);
-
-  const handleStart = (e) => {
-    setStartGame(true);
-    setScore(0);
-    e.target.style.opacity = 0;
-  };
 
   return (
     <div className="screenGame" onClick={handleClick}>
@@ -81,9 +81,7 @@ const Bird = () => {
           left: pipeLeft,
         }}
       ></div>
-      <div className="start" onClick={handleStart}>
-        Start !
-      </div>
+
       <div className="bird" style={{ top: birdPosition }}></div>
       <div
         className="pipe"
@@ -94,7 +92,7 @@ const Bird = () => {
           left: pipeLeft,
         }}
       ></div>
-      <div className="score">{score}</div>
+      <div className="score">score {score}</div>
     </div>
   );
 };
