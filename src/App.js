@@ -1,5 +1,12 @@
+import Bird from './Bird';
+import './index.css';
+
 function App() {
-  return <div className="App">Hello world</div>;
+  return (
+    <div className="WindowGame">
+      <Bird />
+    </div>
+  );
 }
 
 export default App;
