@@ -11,6 +11,7 @@ const Bird = () => {
   const [startGame, setStartGame] = useState(false);
   const [pipeHeight, setPipeHeight] = useState(200);
   const [pipeLeft, setPipeLeft] = useState(1000 - pipeWidth);
+  const [score, setScore] = useState(0);
   const bottomPipeHeight = gameHeight - pipeGap - pipeHeight;
 
   useEffect(() => {
@@ -34,6 +35,19 @@ const Bird = () => {
       setBirdPosition(newBirdPosition);
     }
   };
+  useEffect(() => {
+    const hasHitTopPipe = birdPosition >= 0 && birdPosition < pipeHeight;
+    const hasHitBotPipe =
+      birdPosition <= gameHeight &&
+      birdPosition >= gameHeight - bottomPipeHeight;
+    if (
+      pipeLeft >= 0 &&
+      pipeLeft <= pipeWidth &&
+      (hasHitBotPipe || hasHitTopPipe)
+    ) {
+      setStartGame(false);
+    }
+  });
 
   useEffect(() => {
     if (startGame && pipeLeft >= -60) {
@@ -45,11 +59,14 @@ const Bird = () => {
       };
     } else {
       setPipeLeft(1000 - pipeWidth);
+      setPipeHeight(Math.floor(Math.random() * (gameHeight - pipeGap)));
+      setScore((score) => score + 1);
     }
-  });
+  }, [startGame, pipeLeft]);
 
   const handleStart = (e) => {
     setStartGame(true);
+    setScore(0);
     e.target.style.opacity = 0;
   };
 
@@ -77,6 +94,7 @@ const Bird = () => {
           left: pipeLeft,
         }}
       ></div>
+      <div className="score">{score}</div>
     </div>
   );
 };

@@ -29,3 +29,7 @@
   position: absolute;
   background-color: green;
 }
+.score {
+  position: absolute;
+  left: 500px;
+}
