@@ -4,7 +4,7 @@ const Bird = () => {
   const birdSize = 20;
   const pipeWidth = 50;
   const gameHeight = 500;
-  const gravity = 3;
+  const gravity = 2;
   const jump = 65;
   const pipeGap = 100;
   const [birdPosition, setBirdPosition] = useState(100);
@@ -12,6 +12,8 @@ const Bird = () => {
   const [pipeHeight, setPipeHeight] = useState(200);
   const [pipeLeft, setPipeLeft] = useState(1000 - pipeWidth);
   const [score, setScore] = useState(0);
+  const [backgroundMove, setBacgroundMove] = useState(0);
+
   const bottomPipeHeight = gameHeight - pipeGap - pipeHeight;
 
   useEffect(() => {
@@ -28,6 +30,7 @@ const Bird = () => {
 
   const handleClick = () => {
     let newBirdPosition = birdPosition - jump;
+
     if (!startGame) {
       setStartGame(true);
       setScore(0);
@@ -56,6 +59,7 @@ const Bird = () => {
     if (startGame && pipeLeft >= -60) {
       let pipeMove = setInterval(() => {
         setPipeLeft((pipeLeft) => pipeLeft - 4);
+        setBacgroundMove((backgroundMove) => backgroundMove - 3);
       }, 20);
       return () => {
         clearInterval(pipeMove);
@@ -63,15 +67,21 @@ const Bird = () => {
     } else {
       setPipeLeft(1000 - pipeWidth);
       setPipeHeight(Math.floor(Math.random() * (gameHeight - pipeGap)));
-      console.log(score);
+
       if (startGame) {
         setScore(score + 1);
       }
     }
-  }, [startGame, pipeLeft]);
+  }, [startGame, pipeLeft, score]);
 
   return (
-    <div className="screenGame" onClick={handleClick}>
+    <div
+      className="screenGame"
+      onClick={handleClick}
+      style={{
+        backgroundPositionX: backgroundMove,
+      }}
+    >
       <div
         className="pipe"
         style={{
@@ -82,7 +92,12 @@ const Bird = () => {
         }}
       ></div>
 
-      <div className="bird" style={{ top: birdPosition }}></div>
+      <div
+        className="bird"
+        style={{
+          top: birdPosition,
+        }}
+      ></div>
       <div
         className="pipe"
         style={{
@@ -92,7 +107,7 @@ const Bird = () => {
           left: pipeLeft,
         }}
       ></div>
-      <div className="score">score {score}</div>
+      <div className="score"> {score}</div>
     </div>
   );
 };
