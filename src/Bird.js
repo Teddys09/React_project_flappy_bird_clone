@@ -56,7 +56,7 @@ const Bird = () => {
   });
 
   useEffect(() => {
-    if (startGame && pipeLeft >= -60) {
+    if (startGame && pipeLeft >= 0) {
       let pipeMove = setInterval(() => {
         setPipeLeft((pipeLeft) => pipeLeft - 4);
         setBacgroundMove((backgroundMove) => backgroundMove - 3);
